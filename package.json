@@ -1,0 +1,282 @@
+{
+  "name": "json-to-dart",
+  "displayName": "Json to Dart Model",
+  "description": "Extension convert Json to Dart Model class",
+  "version": "3.5.8",
+  "publisher": "hirantha",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.59.0"
+  },
+  "keywords": [
+    "types",
+    "util",
+    "dart",
+    "flutter",
+    "json",
+    "freezed",
+    "serializing",
+    "null-safety"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:dart",
+    "workspaceContains:pubspec.yaml",
+    "workspaceContains:*/pubspec.yaml",
+    "workspaceContains:*/*/pubspec.yaml",
+    "workspaceContains:*.dart",
+    "workspaceContains:*/*.dart",
+    "workspaceContains:*/*/*.dart",
+    "onCommand:jsonToDart.fromFile",
+    "onCommand:jsonToDart.fromSelection",
+    "onCommand:jsonToDart.fromClipboard",
+    "onCommand:jsonToDart.fromSelectionToCodeGen",
+    "onCommand:jsonToDart.fromClipboardToCodeGen",
+    "onCommand:jsonToDart.addCodeGenerationLibraries"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hiranthar/Json-to-Dart-Model.git"
+  },
+  "author": "https://github.com/hiranthar",
+  "main": "./out/index.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "jsonToDart.fromFile",
+        "title": "JSON to Dart: Build Models"
+      },
+      {
+        "command": "jsonToDart.fromSelection",
+        "title": "JSON to Dart: From Selection"
+      },
+      {
+        "command": "jsonToDart.fromClipboard",
+        "title": "JSON to Dart: From ClipBoard"
+      },
+      {
+        "command": "jsonToDart.addCodeGenerationLibraries",
+        "title": "JSON to Dart: Add Code Generation Libraries"
+      },
+      {
+        "command": "jsonToDart.fromClipboardToCodeGen",
+        "title": "JSON to Dart: From Clipboard to Code Generation Classes"
+      },
+      {
+        "command": "jsonToDart.fromSelectionToCodeGen",
+        "title": "JSON to Dart: From Selection to Code Generation Classes"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "jsonToDart.fromClipboard",
+          "group": "jsonToDartGroup@1",
+          "when": "explorerResourceIsFolder"
+        },
+        {
+          "command": "jsonToDart.fromClipboardToCodeGen",
+          "group": "jsonToDartGroup@1",
+          "when": "explorerResourceIsFolder"
+        },
+        {
+          "command": "jsonToDart.fromFile",
+          "group": "jsonToDartGroup@1",
+          "when": "resourceFilename == models.jsonc || resourceFilename =~ /.json_models/"
+        },
+        {
+          "command": "jsonToDart.addCodeGenerationLibraries",
+          "group": "jsonToDartGroup@1",
+          "when": "resourceFilename == pubspec.yaml"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "jsonToDart.fromSelection",
+          "when": "editorHasSelection && editorLangId == json || editorHasSelection && editorLangId == jsonc"
+        },
+        {
+          "command": "jsonToDart.fromSelectionToCodeGen",
+          "when": "editorHasSelection && editorLangId == json || editorHasSelection && editorLangId == jsonc"
+        },
+        {
+          "command": "jsonToDart.addCodeGenerationLibraries",
+          "when": "editorLangId == yaml"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "jsonToDart.fromFile",
+        "key": "shift+ctrl+alt+B"
+      },
+      {
+        "command": "jsonToDart.fromClipboard",
+        "key": "shift+ctrl+alt+V"
+      },
+      {
+        "command": "jsonToDart.fromSelection",
+        "key": "shift+ctrl+alt+S"
+      },
+      {
+        "command": "jsonToDart.fromClipboardToCodeGen",
+        "key": "shift+ctrl+alt+G"
+      },
+      {
+        "command": "jsonToDart.fromSelectionToCodeGen",
+        "key": "shift+ctrl+alt+H"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "JSON To Dart Model",
+        "properties": {
+          "jsonToDart.codeGenerator": {
+            "type": "string",
+            "default": "Default",
+            "enum": [
+              "Default",
+              "JSON",
+              "Freezed"
+            ],
+            "enumDescriptions": [
+              "By default, the code-generator is disabled.",
+              "Always generate using JSON Serializable code generator.",
+              "Always generate using Freezed code generator."
+            ],
+            "markdownDescription": "Supported code-generators `Freezed` and `Json Serializable`.\n> **Note:** to use one of them you must have all required dependencies."
+          },
+          "jsonToDart.sortConstructorsFirst": {
+            "type": "boolean",
+            "default": false,
+            "description": "Sort constructor declarations before other members."
+          },
+          "jsonToDart.immutable": {
+            "type": "boolean",
+            "default": false,
+            "description": "Generate immutable classes."
+          },
+          "jsonToDart.json.codecs": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "Implements `encode/decode` inside the `fromJson/toJson` methods."
+          },
+          "jsonToDart.toString": {
+            "type": "string",
+            "default": "Default",
+            "enum": [
+              "Default",
+              "Auto",
+              "Dart"
+            ],
+            "enumDescriptions": [
+              "By default, nothing is implemented.",
+              "Automatically implement Stringify method if Equatable is enabled, otherwise the default Dart toString method will be implemented.",
+              "Always implement the default Dart toString method."
+            ],
+            "markdownDescription": "Implement `toString` method to improve the debugging experience."
+          },
+          "jsonToDart.copyWith": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "Implement `copyWith` method (Recommended with immutable classes)."
+          },
+          "jsonToDart.equality": {
+            "type": "string",
+            "default": "Default",
+            "enum": [
+              "Default",
+              "Dart",
+              "Equatable"
+            ],
+            "enumDescriptions": [
+              "By default, nothing is implemented.",
+              "Always implement default Dart operator.",
+              "Always implement Equatable support (required Equatable package)."
+            ],
+            "markdownDescription": "Implement equality operator to compare different instances of `Objects`."
+          },
+          "jsonToDart.nullSafety": {
+            "type": "boolean",
+            "default": true,
+            "markdownDescription": "Indicate that a variable can have the value `null`. Null-Safety is default from version **2.12.0** in the Dart language."
+          },
+          "jsonToDart.includeIfNull": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "The generator will include if `null` values in the serialized output. This option will work only for Dart without null safety support."
+          },
+          "jsonToDart.primaryConfiguration": {
+            "type": "boolean",
+            "default": false,
+            "description": "Activate as primary global configuration. Json To Dart Model will use this setup everywhere and not ask you for inputs."
+          },
+          "jsonToDart.fastMode": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "Disable ask for confirmation to start the conversion from the file `models.jsonc`."
+          },
+          "jsonToDart.targetDirectory.path": {
+            "type": "string",
+            "default": "/lib/models",
+            "markdownDescription": "Default target directory when conversion is from the file `models.jsonc`."
+          },
+          "jsonToDart.fromAndToSuffix": {
+            "type": "string",
+            "default": "Json",
+            "markdownDescription": "The suffix for the method `from/to`. By default is `fromJson/toJson`."
+          },
+          "jsonToDart.runBuilder": {
+            "type": "boolean",
+            "default": true,
+            "description": "Automatically run build runner after generated code for Freezed and JSON Serializable."
+          },
+          "jsonToDart.avoidDynamicTypes": {
+            "type": "boolean",
+            "default": false,
+            "markdownDescription": "Generator will generate `dynamic` types as `Object` with null safety check. **Note:** this option work only with Dart null safety."
+          }
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "vscode:publish": "./node_modules/vsce/vsce publish -p $TOKEN",
+    "vscode:package": "./node_modules/vsce/vsce package",
+    "compile": "tsc -p ./",
+    "lint": "eslint src --ext ts",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/copy-paste": "^1.1.30",
+    "@types/glob": "^7.2.0",
+    "@types/json-to-ast": "^2.1.2",
+    "@types/lodash": "^4.14.177",
+    "@types/mkdirp": "^1.0.2",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.11.10",
+    "@types/vscode": "^1.59.0",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint": "^8.3.0",
+    "glob": "^7.2.0",
+    "mocha": "^9.1.3",
+    "typescript": "^4.5.2",
+    "vscode-test": "^1.6.1"
+  },
+  "dependencies": {
+    "change-case": "^4.1.2",
+    "copy-paste": "^1.3.0",
+    "json-to-ast": "^2.1.0",
+    "jsonc": "^2.0.0",
+    "lodash": "^4.17.21",
+    "mkdirp": "^1.0.4",
+    "pluralize": "^8.0.0",
+    "vsce": "^2.5.0"
+  }
+}
